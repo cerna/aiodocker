@@ -367,7 +367,7 @@ class DockerImages(object):
             self.docker._query("images/{name}/get".format(name=name), "GET")
         )
 
-    def import_image(self, data, stream: bool = False):
+    def import_image(self, data, quiet: bool = True, stream: bool = False):
         """
         Import tarball of image to docker.
 
@@ -378,8 +378,9 @@ class DockerImages(object):
             Tarball of the image
         """
         headers = {"Content-Type": "application/x-tar"}
+        params = {'quiet': quiet}
         cm = self.docker._query_chunked_post(
-            "images/load", "POST", data=data, headers=headers
+            "images/load", "POST", data=data, headers=headers, params=params
         )
         return self._handle_response(cm, stream)
 
